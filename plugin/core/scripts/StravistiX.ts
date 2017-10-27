@@ -22,7 +22,6 @@ import {DisplayFlyByFeedModifier} from "./modifiers/DisplayFlyByFeedModifier";
 import {AbstractExtendedDataModifier} from "./modifiers/extendedActivityData/AbstractExtendedDataModifier";
 import {CyclingExtendedDataModifier} from "./modifiers/extendedActivityData/CyclingExtendedDataModifier";
 import {RunningExtendedDataModifier} from "./modifiers/extendedActivityData/RunningExtendedDataModifier";
-import {GoalsModifier} from "./modifiers/GoalsModifier";
 import {GoogleMapsModifier} from "./modifiers/GoogleMapsModifier";
 import {HideFeedModifier} from "./modifiers/HideFeedModifier";
 import {MenuModifier} from "./modifiers/MenuModifier";
@@ -45,6 +44,7 @@ import {ISegmentInfo, SegmentProcessor} from "./processors/SegmentProcessor";
 import {VacuumProcessor} from "./processors/VacuumProcessor";
 import {ActivitiesSynchronizer, ISyncResult} from "./synchronizer/ActivitiesSynchronizer";
 import {HerokuEndpoints} from "../../common/scripts/modules/HerokuEndpoint";
+import {RunningDetailedAnalysis} from "./modifiers/RunningDetailedAnalysis";
 
 export class StravistiX {
     public static instance: StravistiX = null;
@@ -145,6 +145,7 @@ export class StravistiX {
         this.handleRunningHeartRate();
         this.handleRunningCadence();
         this.handleRunningTemperature();
+        this.handleRunningDetailedAnalysis();
 
         // All activities
         this.handleActivityQRCodeDisplay();
@@ -1039,6 +1040,28 @@ export class StravistiX {
         const runningTemperatureModifier: RunningTemperatureModifier = new RunningTemperatureModifier();
         runningTemperatureModifier.modify();
     }
+
+    protected handleRunningDetailedAnalysis(): void {
+
+        /*if (!this._userSettings.theNewOption) { // TODO
+            return;
+        }*/
+
+        if (!window.location.pathname.match(/^\/activities/)) {
+            return;
+        }
+
+        // Avoid bike activity
+        if (window.pageView.activity().attributes.type != "Run") {
+            return;
+        }
+
+        if (env.debugMode) console.log("Execute handleRunningDetailedAnalysis()");
+
+        const runningDetailedAnalysis: RunningDetailedAnalysis = new RunningDetailedAnalysis(this.activityId);
+        runningDetailedAnalysis.modify();
+    }
+
 
     /**
      *
