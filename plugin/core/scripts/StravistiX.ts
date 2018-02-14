@@ -12,6 +12,7 @@ import { IAthleteUpdate } from "./interfaces/IAthleteUpdate";
 import { ActivitiesSyncModifier } from "./modifiers/ActivitiesSyncModifier";
 import { ActivityBestSplitsModifier } from "./modifiers/ActivityBestSplitsModifier";
 import { ActivityBikeOdoModifier } from "./modifiers/ActivityBikeOdoModifier";
+import { ActivityFeedModifier } from "./modifiers/ActivityFeedModifier";
 import { ActivityQRCodeDisplayModifier } from "./modifiers/ActivityQRCodeDisplayModifier";
 import { ActivityScrollingModifier } from "./modifiers/ActivityScrollingModifier";
 import { ActivitySegmentTimeComparisonModifier } from "./modifiers/ActivitySegmentTimeComparisonModifier";
@@ -127,6 +128,7 @@ export class StravistiX {
         this.handleSegmentHRAP();
         this.handleActivityStravaMapType();
         this.handleHideFeed();
+        this.handleActivityFeedModifier();
         this.handleDisplayFlyByFeedModifier();
         this.handleOnFlyActivitiesSync();
         this.handleActivitiesSyncFromOutside();
@@ -647,6 +649,21 @@ export class StravistiX {
 
         const hideFeedModifier: HideFeedModifier = new HideFeedModifier(this._userSettings);
         hideFeedModifier.modify();
+    }
+
+    handleActivityFeedModifier(): void {
+        if (!window.location.pathname.match(/^\/dashboard/)) {
+            return;
+        }
+
+        if (!this._userSettings.feedChronologicalOrder) {
+            return;
+        }
+
+        if (env.debugMode) console.log("Execute handleActivityFeedModifier()");
+
+        const activityFeedModifier: ActivityFeedModifier = new ActivityFeedModifier(this._userSettings);
+        activityFeedModifier.modify();
     }
 
     protected handleDisplayFlyByFeedModifier(): void {

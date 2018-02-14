@@ -329,6 +329,12 @@ export let commonSettingsService = () => {
                 optionLabels: ["Running"],
                 optionHtml: "This will hide all running activities in the dashboard feed if they are under distance you set (KM or MI). Set empty value or \"0\" to display all running activities in your feed",
                 min: 0,
+            }, {
+                optionKey: "feedChronologicalOrder",
+                optionType: "checkbox",
+                optionTitle: "Organize activity feed chronologically",
+                optionLabels: ["All"],
+                optionHtml: "This will reorder your activity feed to be in chronological order.",
             }],
         }, {
             sectionTitle: "Weather units",
