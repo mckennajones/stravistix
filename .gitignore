@@ -6,6 +6,7 @@
 dist/
 package/
 chrome-win32/
+.vscode/
 
 # common
 plugin/common/**/*.js
